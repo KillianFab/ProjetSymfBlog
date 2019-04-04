@@ -3,24 +3,31 @@
 namespace App\Form;
 
 use App\Entity\Article;
+use App\Entity\Categorie;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ArticleType extends AbstractType
 {
+    //TODO Created At, Modified At, Author Id le mettre automatiquement.
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('title')
-            ->add('content')
-            ->add('created_at')
-            ->add('modified_at')
-            ->add('author_id')
+            ->add('content', TextareaType::class, [
+                'attr' => ['class' => 'tinymce'],
+            ])
             ->add('image_url')
             ->add('published')
             ->add('miseAvant')
-            ->add('categories')
+            ->add('categories', EntityType::class, [
+                'class' => Categorie::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+            ])
         ;
     }
 

@@ -33,8 +33,8 @@
                 <td>{{ article.published }}</td>
                 <td>{{ article.miseAvant ? 'Yes' : 'No' }}</td>
                 <td>
-                    <a href="{{ path('article_show', {'id': article.id}) }}">show</a>
-                    <a href="{{ path('article_edit', {'id': article.id}) }}">edit</a>
+                    <a href="{{ path('article.show', {'id': article.id}) }}">show</a>
+                    <a href="{{ path('article.edit', {'id': article.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -45,5 +45,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('article_new') }}">Create new</a>
+    <a href="{{ path('article.new') }}">Create new</a>
 {% endblock %}

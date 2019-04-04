@@ -11,12 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/categorie")
+ * @Route("/admin/categorie")
  */
 class CategorieController extends AbstractController
 {
     /**
-     * @Route("/", name="categorie_index", methods={"GET"})
+     * @Route("/", name="categorie.index", methods={"GET"})
      */
     public function index(CategorieRepository $categorieRepository): Response
     {
@@ -26,7 +26,7 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="categorie_new", methods={"GET","POST"})
+     * @Route("/new", name="categorie.new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -39,7 +39,7 @@ class CategorieController extends AbstractController
             $entityManager->persist($categorie);
             $entityManager->flush();
 
-            return $this->redirectToRoute('categorie_index');
+            return $this->redirectToRoute('categorie.index');
         }
 
         return $this->render('categorie/new.html.twig', [
@@ -49,7 +49,7 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="categorie_show", methods={"GET"})
+     * @Route("/{id}", name="categorie.show", methods={"GET"})
      */
     public function show(Categorie $categorie): Response
     {
@@ -59,7 +59,7 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="categorie_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="categorie.edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Categorie $categorie): Response
     {
@@ -69,7 +69,7 @@ class CategorieController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('categorie_index', [
+            return $this->redirectToRoute('categorie.index', [
                 'id' => $categorie->getId(),
             ]);
         }
@@ -81,7 +81,7 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="categorie_delete", methods={"DELETE"})
+     * @Route("/{id}", name="categorie.delete", methods={"DELETE"})
      */
     public function delete(Request $request, Categorie $categorie): Response
     {
@@ -91,6 +91,6 @@ class CategorieController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('categorie_index');
+        return $this->redirectToRoute('categorie.index');
     }
 }
