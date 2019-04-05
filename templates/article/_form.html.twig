@@ -1,6 +1,91 @@
+<style>
+    .inputGroup {
+        display: block;
+        margin: 10px 0;
+        position: relative;
+    }
+    .inputGroup label {
+        padding: 12px 30px;
+        width: 100%;
+        display: block;
+        text-align: left;
+        color: #3c454c;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+        transition: color 200ms ease-in;
+        overflow: hidden;
+    }
+    .inputGroup label:before {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        content: "";
+        background-color: #6f42c1;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%) scale3d(1, 1, 1);
+        transform: translate(-50%, -50%) scale3d(1, 1, 1);
+        transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0;
+        z-index: -1;
+    }
+    .inputGroup label:after {
+        width: 32px;
+        height: 32px;
+        content: "";
+        border: 2px solid #d1d7dc;
+        background-color: #fff;
+        background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E ");
+        background-repeat: no-repeat;
+        background-position: 2px 3px;
+        border-radius: 50%;
+        z-index: 2;
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        cursor: pointer;
+        transition: all 200ms ease-in;
+    }
+    .inputGroup input:checked ~ label {
+        color: #fff;
+    }
+    .inputGroup input:checked ~ label:before {
+        -webkit-transform: translate(-50%, -50%) scale3d(56, 56, 1);
+        transform: translate(-50%, -50%) scale3d(56, 56, 1);
+        opacity: 1;
+    }
+    .inputGroup input:checked ~ label:after {
+        background-color: #54e0c7;
+        border-color: #54e0c7;
+    }
+    .inputGroup input {
+        width: 32px;
+        height: 32px;
+        order: 1;
+        z-index: 2;
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        cursor: pointer;
+        visibility: hidden;
+    }
+    .form-check {
+        padding-left:0;
+    }
+    .padding-top-20{
+        padding-top:20px;
+    }
+
+</style>
 {{ form_start(form) }}
-    <div class="row">
-        <div class="col-lg-8">
+    <div class="row padding-top-20">
+        <div class="col-lg-8 padding-top-20">
             <div class="row">
                 <div class="col-lg-12">
                     {{ form_row(form.title) }}
@@ -10,22 +95,47 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-4 padding-top-20" style="background: #e4e4e4;border-left: 1px solid #bbbbbb;">
             <div class="row">
                 <div class="col-lg-12">
-                    {{ form_row(form.miseAvant) }}
+                    <h5>Détail de l'article</h5>
+                </div>
+                <div class="col-lg-6">
+                    <div class="inputGroup">
+                        {{ form_row(form.miseAvant) }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="inputGroup">
+                        {{ form_row(form.published) }}
+                    </div>
                 </div>
                 <div class="col-lg-12">
-                    {{ form_row(form.published) }}
-                </div>
-                <div class="col-lg-12">
-                    {{ form_row(form.image_url) }}
+                    {{ form_row(form.imageFile) }}
                 </div>
                 <div class="col-lg-12">
                     {{ form_row(form.categories) }}
                 </div>
+                <div class="col-lg-12">
+                    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                </div>
             </div>
         </div>
     </div>
-    <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/javascript/ckeditor/ckeditor.js') }}" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js" type="text/javascript"></script>
+{% endblock %}
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery('#article_categories').select2();
+        jQuery('textarea.ckeditor').ckeditor();
+    });
+</script>

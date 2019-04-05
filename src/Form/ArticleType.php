@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Entity\Categorie;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,9 +19,11 @@ class ArticleType extends AbstractType
         $builder
             ->add('title')
             ->add('content', TextareaType::class, [
-                'attr' => ['class' => 'tinymce'],
+                'attr' => ['class' => 'ckeditor'],
             ])
-            ->add('image_url')
+            ->add('imageFile', FileType::class, [
+                'required' => false,
+            ])
             ->add('published')
             ->add('miseAvant')
             ->add('categories', EntityType::class, [

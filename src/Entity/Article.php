@@ -5,9 +5,13 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
+ * @Vich\Uploadable
  */
 class Article
 {
@@ -29,27 +33,39 @@ class Article
     private $content;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", length=255)
+     * @var string|null
      */
-    private $created_at;
+    private $imageName;
+
+    /**
+     * @Vich\UploadableField(mapping="articles", fileNameProperty="imageName")
+     * @var File|null
+     */
+    private $imageFile;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @var \DateTime|null
      */
-    private $modified_at;
+    private $updatedAt;
+
+
+    /**
+     * @ORM\Column(type="datetime")
+     *
+     */
+    private $created_at;
 
     /**
      * @ORM\Column(type="integer")
      */
     private $author_id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $image_url;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="boolean")
      */
     private $published;
 
@@ -66,6 +82,8 @@ class Article
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->created_at = new \DateTime(date('Y-m-d H:i:s'));
+        $this->author_id = 10;
     }
 
     public function getId(): ?int
@@ -102,21 +120,9 @@ class Article
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    public function setCreatedAt()
     {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getModifiedAt(): ?\DateTimeInterface
-    {
-        return $this->modified_at;
-    }
-
-    public function setModifiedAt(\DateTimeInterface $modified_at): self
-    {
-        $this->modified_at = $modified_at;
+        $this->created_at = new \DateTime(date('Y-m-d H:i:s'));
 
         return $this;
     }
@@ -128,34 +134,25 @@ class Article
 
     public function setAuthorId(int $author_id): self
     {
-        $this->author_id = $author_id;
+        $this->author_id = 10;
 
         return $this;
     }
 
-    public function getImageUrl(): ?string
-    {
-        return $this->image_url;
-    }
 
-    public function setImageUrl(string $image_url): self
-    {
-        $this->image_url = $image_url;
-
-        return $this;
-    }
-
-    public function getPublished(): ?int
+    public function getPublished(): ?bool
     {
         return $this->published;
     }
 
-    public function setPublished(int $published): self
+
+    public function setPublished(bool $published): self
     {
         $this->published = $published;
-
         return $this;
     }
+
+
 
     public function getMiseAvant(): ?bool
     {
@@ -196,4 +193,47 @@ class Article
 
         return $this;
     }
+
+    /**
+     * @return null|string
+     */
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    /**
+     * @param null|string $imageName
+     * @return Article
+     */
+    public function setImageName(?string $imageName): Article
+    {
+        $this->imageName = $imageName;
+        return $this;
+    }
+
+    /**
+     * @return null|File
+     */
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * @param null|File $imageFile
+     * @return Article
+     */
+    public function setImageFile(?File $imageFile): Article
+    {
+        $this->imageFile = $imageFile;
+        if ($this->imageFile instanceof UploadedFile) {
+            $this->updatedAt = new \DateTime('now');
+        }
+        return $this;
+    }
+
+
+
+
 }
